@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logic Gates Studio</title>
+    <title>Logic Gates Studio – name bottom footer 16px</title>
     
     <style>
         /* ---------- BASE PAGE ---------- */
@@ -12,27 +12,27 @@
             margin: 0;
             padding: 0;
             background: #0b1624;
-            font-family: Segoe UI, Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         /* ---------- MAIN CONTAINER ---------- */
         .frame-container {
             position: relative;
             width: 100%;
-            height: 100vh;            /* full screen */
-            overflow: hidden;         /* prevents layout shifting */
+            height: 100vh;
+            overflow: hidden;
             border-radius: 24px;
-            padding-bottom: 0px;     /* space reserved for footer */
+            padding-bottom: 0px;
             box-sizing: border-box;
         }
 
         /* ---------- IFRAME ---------- */
         .responsive-iframe {
-            position: absolute;       /* IMPORTANT: removes from document flow */
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;             /* fills entire container */
+            height: 100%;
             border: 0;
             border-radius: 24px 24px 0 0;
             pointer-events: auto;
@@ -40,44 +40,37 @@
         }
 
         /* ---------- FIXED FOOTER ---------- */
-/* make footer act as positioning parent */
-.iframe-footer{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:85px;
-    background:#0d1c2f;
+        .iframe-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 85px;
+            background: #0d1c2f;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 9999;
+            box-shadow: 0 -5px 25px rgba(0,20,30,0.7);
+        }
 
-    display:flex;
-    align-items:center;
-    justify-content:space-between; /* left + right */
+        .footer-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11px;
+            color: #d8ecff;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            text-shadow: 0 0 6px #00b8b8;
+        }
 
-
-
-    z-index:9999;
-}
-
-
-/* CENTER TEXT */
-.footer-center{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);   /* TRUE center */
-
-    font-family:"Times New Roman", Times, serif;
-    font-size:11px;
-    color:#d8ecff;
-    letter-spacing:1px;
-    white-space:nowrap;
-}
-
-
-        /* left side branding */
         .footer-left {
             display: flex;
             align-items: center;
             gap: 12px;
+            margin-left: 20px;
         }
 
         .lightning-left::before {
@@ -87,7 +80,6 @@
             margin-right: 8px;
         }
 
-        /* ----- PRINT BUTTON (right side, stylish) ----- */
         .print-btn {
             background: rgba(10, 30, 40, 0.85);
             backdrop-filter: blur(4px);
@@ -107,7 +99,8 @@
             transition: 0.2s ease;
             text-transform: uppercase;
             border: 1px solid #6ee9ff;
-            margin-left: auto;   /* pushes to far right in flex parent */
+            margin-left: auto;
+            margin-right: 25px;
         }
 
         .print-btn:hover {
@@ -131,7 +124,6 @@
             filter: drop-shadow(0 0 5px white);
         }
 
-        /* caption text */
         .caption {
             position: absolute;
             bottom: -28px;
@@ -142,44 +134,243 @@
             letter-spacing: 1px;
         }
 
-        /* ---------- MOBILE ---------- */
-        @media (max-width: 700px) {
-            .iframe-footer {
-                height: 70px;
-                font-size: 1.2rem;
-                padding: 0 20px;
+        /* ---------- MODAL (WELCOME + NAME) ---------- */
+        .name-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 20, 30, 0.8);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            transition: opacity 0.2s;
+        }
+
+        .name-modal-box {
+            background: #112a41;
+            border: 1px solid #2ac3dd;
+            border-radius: 32px;
+            padding: 38px 42px;
+            max-width: 500px;
+            width: 85%;
+            color: #f0fcff;
+            text-align: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .name-modal-box h2 {
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 18px;
+            color: #c6faff;
+            text-shadow: 0 0 12px cyan;
+            letter-spacing: 2px;
+            font-weight: 600;
+            border-bottom: 1px solid #4ebac0;
+            padding-bottom: 18px;
+        }
+
+        .name-modal-label {
+            font-size: 1.6rem;
+            display: block;
+            margin-bottom: 15px;
+            color: #b3f0ff;
+            font-weight: 400;
+        }
+
+        .name-input-field {
+            width: 90%;
+            padding: 16px 22px;
+            font-size: 1.5rem;
+            background: #0a1a24;
+            border: 2px solid #18b8c0;
+            border-radius: 60px;
+            color: white;
+            text-align: center;
+            margin-bottom: 32px;
+            outline: none;
+            transition: 0.2s;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .name-input-field:focus {
+            border-color: #aaffff;
+            box-shadow: 0 0 28px #0ff;
+            background: #0e262f;
+        }
+
+        .modal-ok-btn {
+            background: #1a8399;
+            border: none;
+            color: white;
+            font-size: 1.9rem;
+            font-weight: bold;
+            padding: 14px 48px;
+            border-radius: 60px;
+            border: 2px solid #aaf0ff;
+            box-shadow: 0 0 20px #00b8d4;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            cursor: pointer;
+            transition: 0.15s;
+            background: radial-gradient(circle at 30% 30%, #2aa5b3, #0f606b);
+        }
+
+        .modal-ok-btn:hover {
+            background: #1fa5b5;
+            box-shadow: 0 0 38px #00f7ff;
+            border-color: white;
+            transform: scale(1.02);
+        }
+
+        .modal-ok-btn:disabled {
+            opacity: 0.5;
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed;
+            border-color: gray;
+        }
+
+        .hidden-modal {
+            display: none !important;
+        }
+
+        /* ---------- PRINT STYLES — NAME BOTTOM (16px), IFRAME 90%, WHITE 10% ---------- */
+        @media print {
+            /* reset page background and layout */
+            body, html {
+                background: white;
+                height: auto;
+                overflow: visible;
+                margin: 0;
+                padding: 0;
             }
+            
+            /* frame becomes block container — 90% height */
             .frame-container {
-                padding-bottom: 70px;
+                position: relative;
+                width: 100%;
+                height: 90vh !important;        /* occupy 90% of page height */
+                max-height: 90vh;
+                overflow: hidden;
+                display: block;
+                border-radius: 0;
+                page-break-inside: avoid;
+                margin: 0;
+                padding: 0;
             }
-            .print-btn {
-                padding: 6px 18px;
-                font-size: 1.1rem;
+            
+            /* iframe fills the 90% space – shows circuit */
+            .responsive-iframe {
+                position: relative !important;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100% !important;
+                min-height: 0;
+                display: block;
+                border: none;
+                border-radius: 0;
             }
-            .print-icon {
-                font-size: 1.4rem;
+            
+            /* hide screen footer, caption, modal */
+            .iframe-footer,
+            .caption,
+            .name-modal-overlay {
+                display: none !important;
+            }
+            
+            /* --- NAME FOOTER: BOTTOM of page, 16px, exactly "Student Name: ..." --- */
+            .print-name-footer {
+                display: block !important;
+                position: fixed;
+                bottom: 10vh;           /* sits just above white bottom area */
+                left: 0;
+                width: 100%;
+                text-align: center;
+                font-size: 16px !important;
+                font-family: 'Courier New', 'Times New Roman', monospace;
+                background: white;
+                color: black;
+                padding: 12px 0;
+                font-weight: 600;
+                letter-spacing: 0.8px;
+                border-top: 1px solid #ccc;
+                border-bottom: none;
+                box-sizing: border-box;
+                z-index: 99999;
+                line-height: 1.2;
+            }
+            
+            /* --- WHITE BOTTOM 10%: plain white, no text, just blank space --- */
+            .print-white-bottom {
+                display: block !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 10vh;            /* exactly 10% of viewport */
+                min-height: 60px;
+                background: white;
+                margin: 0;
+                padding: 0;
+                border: none;
+                box-sizing: border-box;
+                z-index: 100000;
+            }
+            
+            /* header is not used anymore – hide it */
+            .print-name-header {
+                display: none !important;
             }
         }
 
-        @media (max-width: 500px) {
-            .iframe-footer {
-                height: 60px;
-                font-size: 0.95rem;
-                padding: 0 16px;
-            }
-            .print-btn {
-                padding: 4px 14px;
-                font-size: 0.9rem;
-            }
-            .print-icon {
-                font-size: 1.2rem;
-            }
+        /* screen-only: footer and white bottom are hidden */
+        .print-name-footer {
+            display: none;
+        }
+        .print-white-bottom {
+            display: none;
+        }
+        .print-name-header {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+            .iframe-footer { height: 70px; }
+            .print-btn { padding: 6px 18px; font-size: 1.1rem; }
+            .name-modal-box { padding: 25px 20px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- NAME MODAL – appears on load -->
+    <div id="welcomeNameModal" class="name-modal-overlay">
+        <div class="name-modal-box">
+            <h2>⚡ WELCOME ⚡</h2>
+            <span class="name-modal-label">DIGITAL ELECTRONICS ENGINEER</span>
+            <input type="text" id="userNameInput" class="name-input-field" placeholder="Enter your name" autocomplete="off" autofocus>
+            <button id="modalOkButton" class="modal-ok-btn" disabled>OK</button>
+        </div>
+    </div>
+
+    <!-- ========== PRINT ELEMENTS (only visible in PDF) ========== -->
+    <!-- NAME FOOTER: bottom (above white 10%) – 16px "Student Name: " -->
+    <div id="printNameFooter" class="print-name-footer"></div>
+    
+    <!-- WHITE BOTTOM 10%: plain white, empty -->
+    <div id="printWhiteBottom" class="print-white-bottom"></div>
+
+    <!-- (legacy header – hidden) -->
+    <div id="printNameHeader" class="print-name-header"></div>
+
     <div class="frame-container">
-      
         <iframe 
             class="responsive-iframe"
             id="logicStudioFrame"
@@ -190,53 +381,112 @@
             loading="lazy">
         </iframe>
         
-        <!-- FOOTER – PRINT BUTTON ON RIGHT SIDE (fixed to bottom) -->
+        <!-- FOOTER with PRINT BUTTON -->
         <div class="iframe-footer">
-    
-    <!-- left side -->
-   <div class="footer-left">
-    <span class="lightning-left" style="color:white;"></span>
-    <span style="color:white;">LOGIC GATES STUDIO</span>
-</div>
-
-
-    <!-- CENTER TEXT (NEW) -->
-    <div class="footer-center">
-        I&nbsp;&nbsp;firdous lone&nbsp;&nbsp;I&nbsp;&nbsp;TeachingToolkit I Logic Gates
+            <div class="footer-left">
+                <span class="lightning-left" style="color:white;"></span>
+                <span style="color:white;">LOGIC GATES STUDIO</span>
+            </div>
+            <div class="footer-center">
+                I&nbsp;&nbsp;firdous lone&nbsp;&nbsp;I&nbsp;&nbsp;TeachingToolkit I Logic Gates
+            </div>
+            <button class="print-btn" id="globalPrintButton">
+                <span class="print-icon">🖨️</span> SAVE
+            </button>
+        </div>
+        <span class="caption">print button</span>
     </div>
-    
-    <!-- right side -->
-    <button class="print-btn" id="globalPrintButton">
-        <span class="print-icon">🖨️</span> SAVE
-    </button>
-
-</div>
-
-<span class="caption">print button</span>
-
 
     <script>
         (function() {
             "use strict";
+
+            // ---------- STORE ENTERED NAME ----------
+            let enteredUserName = "";
+
+            // ---------- MODAL ELEMENTS ----------
+            const modal = document.getElementById('welcomeNameModal');
+            const nameInput = document.getElementById('userNameInput');
+            const okBtn = document.getElementById('modalOkButton');
             
-            // ========== 1. PRINT BUTTON: OPENS NATIVE PRINT WINDOW ==========
+            // ---------- PRINT FOOTER (Student Name at BOTTOM, 16px) ----------
+            const printNameFooter = document.getElementById('printNameFooter');
+            // white bottom is static, no text needed
+
+            // ---------- MODAL: enable OK only if name not empty ----------
+            function validateNameInput() {
+                okBtn.disabled = nameInput.value.trim().length === 0;
+            }
+            nameInput.addEventListener('input', validateNameInput);
+
+            // ---------- CLOSE MODAL AND STORE NAME ----------
+            function closeModalIfNameExists() {
+                const trimmedName = nameInput.value.trim();
+                if (trimmedName !== "") {
+                    enteredUserName = trimmedName;
+                    
+                    // --- UPDATE PRINT FOOTER: exactly "Student Name: <name>" (16px) ---
+                    printNameFooter.innerText = "Student Name: " + enteredUserName;
+                    
+                    modal.classList.add('hidden-modal');
+                    console.log(`✅ Name stored: "${enteredUserName}" – bottom footer 16px`);
+                }
+            }
+
+            okBtn.addEventListener('click', closeModalIfNameExists);
+            nameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (nameInput.value.trim() !== "") closeModalIfNameExists();
+                }
+            });
+
+            // ---------- ON PAGE LOAD: SHOW MODAL ----------
+            window.addEventListener('load', function() {
+                // fresh start
+                enteredUserName = "";
+                printNameFooter.innerText = "";      // clear footer
+                modal.classList.remove('hidden-modal');
+                nameInput.value = "";
+                okBtn.disabled = true;
+                nameInput.focus();
+            });
+
+            // ---------- PRINT BUTTON: set bottom footer (16px) & white area ----------
             const printBtn = document.getElementById('globalPrintButton');
             if (printBtn) {
                 printBtn.addEventListener('click', function(e) {
-                    e.preventDefault();      // avoid any weird default behaviour
-                    e.stopPropagation();      // keep inside footer
-                    window.print();           // open browser print dialog
-                    console.log('🖨️ Print window opened');
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // FINAL update: set footer with strict format "Student Name: ..." (16px)
+                    if (enteredUserName && enteredUserName.trim() !== "") {
+                        printNameFooter.innerText = "Student Name: " + enteredUserName.trim();
+                    } else {
+                        // fallback if somehow no name (modal forces name, but just in case)
+                        printNameFooter.innerText = "Student Name: Guest";
+                    }
+
+                    // White bottom div is already plain white, no text needed.
+
+                    // 🖨️ PRINT – iframe 90%, name footer just above white 10%
+                    window.print();
                 });
             }
 
-            // ========== 2. FULL RIGHT-CLICK PROTECTION (GLOBAL + IFRAME) ==========
-            function preventRightClickGlobal(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
+            // ---------- BEFORE PRINT (Ctrl+P safety) ----------
+            window.addEventListener('beforeprint', function() {
+                if (enteredUserName && enteredUserName.trim() !== "") {
+                    printNameFooter.innerText = "Student Name: " + enteredUserName.trim();
+                } else {
+                    printNameFooter.innerText = "Student Name: Guest";
+                }
+            });
 
+            // ---------- PRESERVE ALL ORIGINAL PROTECTIONS (right‑click, Ctrl+S) ----------
+            function preventRightClickGlobal(e) {
+                e.preventDefault(); e.stopPropagation(); return false;
+            }
             window.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
             document.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
             document.body.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
@@ -245,7 +495,6 @@
             if (iframe) {
                 iframe.addEventListener('contextmenu', preventRightClickGlobal);
                 iframe.parentElement.addEventListener('contextmenu', preventRightClickGlobal);
-
                 iframe.addEventListener('load', function() {
                     try {
                         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -253,70 +502,35 @@
                             iframeDoc.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
                             iframeDoc.body.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
                         }
-                    } catch (e) { /* cross-origin – ignore */ }
+                    } catch (e) { /* cross-origin */ }
                 });
             }
 
-            // ========== 3. AGGRESSIVE CTRL+S / CTRL+SHIFT+S BLOCK ==========
-            // --- MULTIPLE LAYERS: keydown, keyup, global overrides ---
             function killSaveShortcut(e) {
-                // Blocks Ctrl+S, Ctrl+Shift+S (any combination)
                 if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation(); // stronger than stopPropagation
-                    e.stopPropagation();
-                    return false;
+                    e.preventDefault(); e.stopImmediatePropagation(); e.stopPropagation(); return false;
                 }
             }
-
-            // Add multiple listeners with highest priority (capture phase)
             window.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
             document.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
             document.body.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
-
-            // Also block on keyup (some browsers/ extensions try keyup save)
-            window.addEventListener('keyup', killSaveShortcut, { capture: true, passive: false });
-            document.addEventListener('keyup', killSaveShortcut, { capture: true, passive: false });
-
-            // Override the native onkeydown (legacy, bulletproof)
-            window.onkeydown = function(e) {
-                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                    e.preventDefault();
-                    return false;
-                }
-            };
-            document.onkeydown = function(e) {
-                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                    e.preventDefault();
-                    return false;
-                }
-            };
-
-            // Block Save As via Ctrl+Shift+S explicitly (extra layer)
+            
             function blockShiftSave(e) {
                 if (e.ctrlKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    return false;
+                    e.preventDefault(); e.stopImmediatePropagation(); return false;
                 }
             }
             window.addEventListener('keydown', blockShiftSave, { capture: true, passive: false });
             document.addEventListener('keydown', blockShiftSave, { capture: true, passive: false });
 
-            // ---------- EXTREME MEASURE: disable window.print() override? no, we need print button.
-            // but we completely kill native save shortcuts for the main window.
-            // Override navigator keyboard behavior? not needed, but we also kill the event on iframe level
             if (iframe) {
                 iframe.addEventListener('load', function() {
                     try {
                         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                         if (iframeDoc) {
-                            // inject CTRL+S block inside iframe (if same-origin)
                             iframeDoc.addEventListener('keydown', function(e) {
                                 if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    return false;
+                                    e.preventDefault(); e.stopPropagation(); return false;
                                 }
                             }, { capture: true });
                         }
@@ -324,29 +538,16 @@
                 });
             }
 
-            // ========== 4. FOOTER HEIGHT (no longer needed with fixed footer, but keep for compatibility) ==========
-            // footer is fixed, no dynamic margin needed – we remove conflicting adjustFooterHeight
-            // just to avoid errors; we keep a dummy function 
-            window.adjustFooterHeight = function() {};
-
-            // ========== 5. EXTREME RIGHT-CLICK PROTECTION LAYER ==========
             window.addEventListener('copy', (e) => e.preventDefault());
             window.addEventListener('cut', (e) => e.preventDefault());
             window.addEventListener('paste', (e) => e.preventDefault());
-            
             document.oncontextmenu = function() { return false; };
             window.oncontextmenu = function() { return false; };
-            
             document.addEventListener('mousedown', function(e) {
                 if (e.button === 2) { e.preventDefault(); e.stopPropagation(); return false; }
             }, { capture: true });
-            
-            document.addEventListener('mouseup', function(e) {
-                if (e.button === 2) { e.preventDefault(); e.stopPropagation(); return false; }
-            }, { capture: true });
 
-            // ========== 6. FINAL VERIFICATION: CTRL+S NOW IMPOSSIBLE ==========
-            console.log('✅ CTRL+S fully blocked – print button on footer right side');
+            console.log('📄 PDF ready: "Student Name: ..." BOTTOM footer, 16px, white 10% below');
         })();
     </script>
 </body>
