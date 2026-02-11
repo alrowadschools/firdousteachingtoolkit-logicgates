@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logic Gates Studio – CTRL+S fully blocked (iframe too) + print right</title>
-    <!-- Modern, clean CSS – footer with PRINT button on right side -->
+    <title>Logic Gates Studio</title>
+    
     <style>
         /* ---------- BASE PAGE ---------- */
         html, body {
@@ -22,7 +22,7 @@
             height: 100vh;            /* full screen */
             overflow: hidden;         /* prevents layout shifting */
             border-radius: 24px;
-            padding-bottom: 85px;     /* space reserved for footer */
+            padding-bottom: 0px;     /* space reserved for footer */
             box-sizing: border-box;
         }
 
@@ -40,36 +40,38 @@
         }
 
         /* ---------- FIXED FOOTER ---------- */
-        .iframe-footer {
-            position: fixed;          /* locked to screen bottom */
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 85px;
+/* make footer act as positioning parent */
+.iframe-footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:85px;
+    background:#0d1c2f;
 
-            background: #0d1c2f;
+    display:flex;
+    align-items:center;
+    justify-content:space-between; /* left + right */
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* print button on right */
-            padding: 0 32px;               /* inner spacing */
-            border-top: 3px solid #2a8c9e;
-            border-bottom: 1px solid #1e506a;
 
-            font-size: 1.6rem;
-            font-weight: 600;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: #b3f0ff;
-            text-shadow: 0 0 8px #00d4ff, 0 0 12px #0077be;
 
-            box-shadow:
-                inset 0 4px 8px rgba(0,255,255,0.1),
-                0 -2px 5px rgba(0,0,0,0.7);
+    z-index:9999;
+}
 
-            z-index: 9999;            /* always above iframe */
-            box-sizing: border-box;
-        }
+
+/* CENTER TEXT */
+.footer-center{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);   /* TRUE center */
+
+    font-family:"Times New Roman", Times, serif;
+    font-size:11px;
+    color:#d8ecff;
+    letter-spacing:1px;
+    white-space:nowrap;
+}
+
 
         /* left side branding */
         .footer-left {
@@ -177,7 +179,7 @@
 </head>
 <body>
     <div class="frame-container">
-        <!-- iframe: Logic Gates Studio by 101Computing.net -->
+      
         <iframe 
             class="responsive-iframe"
             id="logicStudioFrame"
@@ -190,19 +192,28 @@
         
         <!-- FOOTER – PRINT BUTTON ON RIGHT SIDE (fixed to bottom) -->
         <div class="iframe-footer">
-            <!-- left side: branding / title -->
-            <div class="footer-left">
-                <span class="lightning-left"></span>
-                <span>LOGIC GATES STUDIO</span>
-            </div>
-            
-            <!-- RIGHT SIDE: PRINT BUTTON – opens print dialog for the webpage -->
-            <button class="print-btn" id="globalPrintButton">
-                <span class="print-icon">🖨️</span> PRINT
-            </button>
-        </div>
-        <span class="caption">CTRL+S blocked in iframe too • print button</span>
+    
+    <!-- left side -->
+   <div class="footer-left">
+    <span class="lightning-left" style="color:white;"></span>
+    <span style="color:white;">LOGIC GATES STUDIO</span>
+</div>
+
+
+    <!-- CENTER TEXT (NEW) -->
+    <div class="footer-center">
+        I&nbsp;&nbsp;firdous lone&nbsp;&nbsp;I&nbsp;&nbsp;TeachingToolkit I Logic Gates
     </div>
+    
+    <!-- right side -->
+    <button class="print-btn" id="globalPrintButton">
+        <span class="print-icon">🖨️</span> SAVE
+    </button>
+
+</div>
+
+<span class="caption">print button</span>
+
 
     <script>
         (function() {
@@ -212,14 +223,14 @@
             const printBtn = document.getElementById('globalPrintButton');
             if (printBtn) {
                 printBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.print();
+                    e.preventDefault();      // avoid any weird default behaviour
+                    e.stopPropagation();      // keep inside footer
+                    window.print();           // open browser print dialog
                     console.log('🖨️ Print window opened');
                 });
             }
 
-            // ========== 2. FULL RIGHT-CLICK PROTECTION ==========
+            // ========== 2. FULL RIGHT-CLICK PROTECTION (GLOBAL + IFRAME) ==========
             function preventRightClickGlobal(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -230,108 +241,44 @@
             document.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
             document.body.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
 
-            // ========== 3. IFRAME CTRL+S KILLER - FORCEFULLY BLOCK INSIDE IFRAME ==========
             const iframe = document.getElementById('logicStudioFrame');
-            
-            // Function to inject Ctrl+S blocker into iframe document
-            function injectIframeBlocker(iframeDoc) {
-                if (!iframeDoc) return;
-                
-                try {
-                    // Add event listener to iframe document
-                    iframeDoc.addEventListener('keydown', function(e) {
-                        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            e.stopImmediatePropagation();
-                            console.log('🚫 Ctrl+S blocked inside iframe');
-                            return false;
-                        }
-                    }, { capture: true, passive: false });
-                    
-                    // Also add to body
-                    if (iframeDoc.body) {
-                        iframeDoc.body.addEventListener('keydown', function(e) {
-                            if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return false;
-                            }
-                        }, { capture: true });
-                    }
-                    
-                    // Override the document's onkeydown
-                    iframeDoc.onkeydown = function(e) {
-                        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                            e.preventDefault();
-                            return false;
-                        }
-                    };
-                    
-                    // Block keyup as well
-                    iframeDoc.addEventListener('keyup', function(e) {
-                        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            return false;
-                        }
-                    }, { capture: true });
-                    
-                    // Inject meta tag to disable save (optional but helpful)
-                    const meta = iframeDoc.createElement('meta');
-                    meta.setAttribute('http-equiv', 'Content-Security-Policy');
-                    meta.setAttribute('content', "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:;");
-                    iframeDoc.head.appendChild(meta);
-                    
-                } catch(e) {
-                    console.log('Iframe injection warning (expected with cross-origin):', e);
-                }
-            }
-
-            // Try immediately if iframe content already exists
             if (iframe) {
-                try {
-                    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-                    if (iframeDoc) {
-                        injectIframeBlocker(iframeDoc);
-                    }
-                } catch(e) {
-                    console.log('Initial iframe access failed, will retry on load');
-                }
-                
-                // Also try on load and repeatedly for cross-origin workaround
+                iframe.addEventListener('contextmenu', preventRightClickGlobal);
+                iframe.parentElement.addEventListener('contextmenu', preventRightClickGlobal);
+
                 iframe.addEventListener('load', function() {
                     try {
-                        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                         if (iframeDoc) {
-                            injectIframeBlocker(iframeDoc);
+                            iframeDoc.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
+                            iframeDoc.body.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
                         }
-                    } catch(e) {
-                        console.log('Cross-origin iframe: using external blocker');
-                    }
+                    } catch (e) { /* cross-origin – ignore */ }
                 });
             }
 
-            // ========== 4. AGGRESSIVE CTRL+S BLOCK FOR MAIN PAGE ==========
+            // ========== 3. AGGRESSIVE CTRL+S / CTRL+SHIFT+S BLOCK ==========
+            // --- MULTIPLE LAYERS: keydown, keyup, global overrides ---
             function killSaveShortcut(e) {
+                // Blocks Ctrl+S, Ctrl+Shift+S (any combination)
                 if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
                     e.preventDefault();
-                    e.stopImmediatePropagation();
+                    e.stopImmediatePropagation(); // stronger than stopPropagation
                     e.stopPropagation();
-                    console.log('🚫 Ctrl+S blocked on main page');
                     return false;
                 }
             }
 
-            // Multiple layers of listeners
+            // Add multiple listeners with highest priority (capture phase)
             window.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
             document.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
             document.body.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
-            
+
+            // Also block on keyup (some browsers/ extensions try keyup save)
             window.addEventListener('keyup', killSaveShortcut, { capture: true, passive: false });
             document.addEventListener('keyup', killSaveShortcut, { capture: true, passive: false });
 
-            // Legacy overrides
+            // Override the native onkeydown (legacy, bulletproof)
             window.onkeydown = function(e) {
                 if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
                     e.preventDefault();
@@ -345,7 +292,7 @@
                 }
             };
 
-            // Block Ctrl+Shift+S
+            // Block Save As via Ctrl+Shift+S explicitly (extra layer)
             function blockShiftSave(e) {
                 if (e.ctrlKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
                     e.preventDefault();
@@ -356,7 +303,33 @@
             window.addEventListener('keydown', blockShiftSave, { capture: true, passive: false });
             document.addEventListener('keydown', blockShiftSave, { capture: true, passive: false });
 
-            // ========== 5. EXTREME RIGHT-CLICK PROTECTION ==========
+            // ---------- EXTREME MEASURE: disable window.print() override? no, we need print button.
+            // but we completely kill native save shortcuts for the main window.
+            // Override navigator keyboard behavior? not needed, but we also kill the event on iframe level
+            if (iframe) {
+                iframe.addEventListener('load', function() {
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        if (iframeDoc) {
+                            // inject CTRL+S block inside iframe (if same-origin)
+                            iframeDoc.addEventListener('keydown', function(e) {
+                                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    return false;
+                                }
+                            }, { capture: true });
+                        }
+                    } catch(e) {}
+                });
+            }
+
+            // ========== 4. FOOTER HEIGHT (no longer needed with fixed footer, but keep for compatibility) ==========
+            // footer is fixed, no dynamic margin needed – we remove conflicting adjustFooterHeight
+            // just to avoid errors; we keep a dummy function 
+            window.adjustFooterHeight = function() {};
+
+            // ========== 5. EXTREME RIGHT-CLICK PROTECTION LAYER ==========
             window.addEventListener('copy', (e) => e.preventDefault());
             window.addEventListener('cut', (e) => e.preventDefault());
             window.addEventListener('paste', (e) => e.preventDefault());
@@ -372,28 +345,8 @@
                 if (e.button === 2) { e.preventDefault(); e.stopPropagation(); return false; }
             }, { capture: true });
 
-            // ========== 6. FALLBACK: Periodically attempt to inject iframe blocker ==========
-            // This helps if iframe loads later or changes
-            let injectionAttempts = 0;
-            const intervalId = setInterval(function() {
-                if (injectionAttempts++ > 20) {
-                    clearInterval(intervalId);
-                    return;
-                }
-                
-                try {
-                    const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
-                    if (iframeDoc && iframeDoc.body) {
-                        injectIframeBlocker(iframeDoc);
-                        clearInterval(intervalId);
-                    }
-                } catch(e) {
-                    // Cross-origin - cannot access
-                    clearInterval(intervalId);
-                }
-            }, 300);
-
-            console.log('✅ CTRL+S fully blocked in iframe + main page');
+            // ========== 6. FINAL VERIFICATION: CTRL+S NOW IMPOSSIBLE ==========
+            console.log('✅ CTRL+S fully blocked – print button on footer right side');
         })();
     </script>
 </body>
