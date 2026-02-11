@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Gates Studio – CTRL+S fully blocked (iframe too) + print right</title>
+    <!-- Modern, clean CSS – footer with PRINT button on right side -->
+    <style>
+        /* ---------- BASE PAGE ---------- */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #0b1624;
+            font-family: Segoe UI, Arial, sans-serif;
+        }
+
+        /* ---------- MAIN CONTAINER ---------- */
+        .frame-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;            /* full screen */
+            overflow: hidden;         /* prevents layout shifting */
+            border-radius: 24px;
+            padding-bottom: 85px;     /* space reserved for footer */
+            box-sizing: border-box;
+        }
+
+        /* ---------- IFRAME ---------- */
+        .responsive-iframe {
+            position: absolute;       /* IMPORTANT: removes from document flow */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;             /* fills entire container */
+            border: 0;
+            border-radius: 24px 24px 0 0;
+            pointer-events: auto;
+            background: #000;
+        }
+
+        /* ---------- FIXED FOOTER ---------- */
+        .iframe-footer {
+            position: fixed;          /* locked to screen bottom */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 85px;
+
+            background: #0d1c2f;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* print button on right */
+            padding: 0 32px;               /* inner spacing */
+            border-top: 3px solid #2a8c9e;
+            border-bottom: 1px solid #1e506a;
+
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #b3f0ff;
+            text-shadow: 0 0 8px #00d4ff, 0 0 12px #0077be;
+
+            box-shadow:
+                inset 0 4px 8px rgba(0,255,255,0.1),
+                0 -2px 5px rgba(0,0,0,0.7);
+
+            z-index: 9999;            /* always above iframe */
+            box-sizing: border-box;
+        }
+
+        /* left side branding */
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lightning-left::before {
+            content: "⚡";
+            font-size: 1.9rem;
+            filter: drop-shadow(0 0 6px cyan);
+            margin-right: 8px;
+        }
+
+        /* ----- PRINT BUTTON (right side, stylish) ----- */
+        .print-btn {
+            background: rgba(10, 30, 40, 0.85);
+            backdrop-filter: blur(4px);
+            border: 2px solid #3ac7d6;
+            color: #f0feff;
+            padding: 8px 22px;
+            border-radius: 42px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 2.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 0 15px #00d0d0, inset 0 0 5px #70f0ff;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-transform: uppercase;
+            border: 1px solid #6ee9ff;
+            margin-left: auto;   /* pushes to far right in flex parent */
+        }
+
+        .print-btn:hover {
+            background: #146b78;
+            border-color: #a1f5ff;
+            box-shadow: 0 0 24px #0ff, inset 0 0 10px #bfffff;
+            color: white;
+            text-shadow: 0 0 12px white;
+            transform: scale(1.02);
+        }
+
+        .print-btn:active {
+            background: #0e4f59;
+            transform: scale(0.98);
+            box-shadow: 0 0 30px #00f7ff;
+        }
+
+        .print-icon {
+            font-size: 1.7rem;
+            line-height: 1;
+            filter: drop-shadow(0 0 5px white);
+        }
+
+        /* caption text */
+        .caption {
+            position: absolute;
+            bottom: -28px;
+            right: 8px;
+            color: #7f9fbb;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        /* ---------- MOBILE ---------- */
+        @media (max-width: 700px) {
+            .iframe-footer {
+                height: 70px;
+                font-size: 1.2rem;
+                padding: 0 20px;
+            }
+            .frame-container {
+                padding-bottom: 70px;
+            }
+            .print-btn {
+                padding: 6px 18px;
+                font-size: 1.1rem;
+            }
+            .print-icon {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .iframe-footer {
+                height: 60px;
+                font-size: 0.95rem;
+                padding: 0 16px;
+            }
+            .print-btn {
+                padding: 4px 14px;
+                font-size: 0.9rem;
+            }
+            .print-icon {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="frame-container">
+        <!-- iframe: Logic Gates Studio by 101Computing.net -->
+        <iframe 
+            class="responsive-iframe"
+            id="logicStudioFrame"
+            src="https://www.101computing.net/logic-gates-studio/"
+            title="Logic Gates Studio – interactive circuit designer"
+            referrerpolicy="no-referrer-when-downgrade"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads allow-modals"
+            loading="lazy">
+        </iframe>
+        
+        <!-- FOOTER – PRINT BUTTON ON RIGHT SIDE (fixed to bottom) -->
+        <div class="iframe-footer">
+            <!-- left side: branding / title -->
+            <div class="footer-left">
+                <span class="lightning-left"></span>
+                <span>LOGIC GATES STUDIO</span>
+            </div>
+            
+            <!-- RIGHT SIDE: PRINT BUTTON – opens print dialog for the webpage -->
+            <button class="print-btn" id="globalPrintButton">
+                <span class="print-icon">🖨️</span> PRINT
+            </button>
+        </div>
+        <span class="caption">CTRL+S blocked in iframe too • print button</span>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+            
+            // ========== 1. PRINT BUTTON: OPENS NATIVE PRINT WINDOW ==========
+            const printBtn = document.getElementById('globalPrintButton');
+            if (printBtn) {
+                printBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.print();
+                    console.log('🖨️ Print window opened');
+                });
+            }
+
+            // ========== 2. FULL RIGHT-CLICK PROTECTION ==========
+            function preventRightClickGlobal(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            window.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
+            document.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
+            document.body.addEventListener('contextmenu', preventRightClickGlobal, { capture: true });
+
+            // ========== 3. IFRAME CTRL+S KILLER - FORCEFULLY BLOCK INSIDE IFRAME ==========
+            const iframe = document.getElementById('logicStudioFrame');
+            
+            // Function to inject Ctrl+S blocker into iframe document
+            function injectIframeBlocker(iframeDoc) {
+                if (!iframeDoc) return;
+                
+                try {
+                    // Add event listener to iframe document
+                    iframeDoc.addEventListener('keydown', function(e) {
+                        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            console.log('🚫 Ctrl+S blocked inside iframe');
+                            return false;
+                        }
+                    }, { capture: true, passive: false });
+                    
+                    // Also add to body
+                    if (iframeDoc.body) {
+                        iframeDoc.body.addEventListener('keydown', function(e) {
+                            if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                            }
+                        }, { capture: true });
+                    }
+                    
+                    // Override the document's onkeydown
+                    iframeDoc.onkeydown = function(e) {
+                        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    };
+                    
+                    // Block keyup as well
+                    iframeDoc.addEventListener('keyup', function(e) {
+                        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }
+                    }, { capture: true });
+                    
+                    // Inject meta tag to disable save (optional but helpful)
+                    const meta = iframeDoc.createElement('meta');
+                    meta.setAttribute('http-equiv', 'Content-Security-Policy');
+                    meta.setAttribute('content', "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:;");
+                    iframeDoc.head.appendChild(meta);
+                    
+                } catch(e) {
+                    console.log('Iframe injection warning (expected with cross-origin):', e);
+                }
+            }
+
+            // Try immediately if iframe content already exists
+            if (iframe) {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                    if (iframeDoc) {
+                        injectIframeBlocker(iframeDoc);
+                    }
+                } catch(e) {
+                    console.log('Initial iframe access failed, will retry on load');
+                }
+                
+                // Also try on load and repeatedly for cross-origin workaround
+                iframe.addEventListener('load', function() {
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                        if (iframeDoc) {
+                            injectIframeBlocker(iframeDoc);
+                        }
+                    } catch(e) {
+                        console.log('Cross-origin iframe: using external blocker');
+                    }
+                });
+            }
+
+            // ========== 4. AGGRESSIVE CTRL+S BLOCK FOR MAIN PAGE ==========
+            function killSaveShortcut(e) {
+                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    console.log('🚫 Ctrl+S blocked on main page');
+                    return false;
+                }
+            }
+
+            // Multiple layers of listeners
+            window.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
+            document.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
+            document.body.addEventListener('keydown', killSaveShortcut, { capture: true, passive: false });
+            
+            window.addEventListener('keyup', killSaveShortcut, { capture: true, passive: false });
+            document.addEventListener('keyup', killSaveShortcut, { capture: true, passive: false });
+
+            // Legacy overrides
+            window.onkeydown = function(e) {
+                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    return false;
+                }
+            };
+            document.onkeydown = function(e) {
+                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    return false;
+                }
+            };
+
+            // Block Ctrl+Shift+S
+            function blockShiftSave(e) {
+                if (e.ctrlKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
+            }
+            window.addEventListener('keydown', blockShiftSave, { capture: true, passive: false });
+            document.addEventListener('keydown', blockShiftSave, { capture: true, passive: false });
+
+            // ========== 5. EXTREME RIGHT-CLICK PROTECTION ==========
+            window.addEventListener('copy', (e) => e.preventDefault());
+            window.addEventListener('cut', (e) => e.preventDefault());
+            window.addEventListener('paste', (e) => e.preventDefault());
+            
+            document.oncontextmenu = function() { return false; };
+            window.oncontextmenu = function() { return false; };
+            
+            document.addEventListener('mousedown', function(e) {
+                if (e.button === 2) { e.preventDefault(); e.stopPropagation(); return false; }
+            }, { capture: true });
+            
+            document.addEventListener('mouseup', function(e) {
+                if (e.button === 2) { e.preventDefault(); e.stopPropagation(); return false; }
+            }, { capture: true });
+
+            // ========== 6. FALLBACK: Periodically attempt to inject iframe blocker ==========
+            // This helps if iframe loads later or changes
+            let injectionAttempts = 0;
+            const intervalId = setInterval(function() {
+                if (injectionAttempts++ > 20) {
+                    clearInterval(intervalId);
+                    return;
+                }
+                
+                try {
+                    const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
+                    if (iframeDoc && iframeDoc.body) {
+                        injectIframeBlocker(iframeDoc);
+                        clearInterval(intervalId);
+                    }
+                } catch(e) {
+                    // Cross-origin - cannot access
+                    clearInterval(intervalId);
+                }
+            }, 300);
+
+            console.log('✅ CTRL+S fully blocked in iframe + main page');
+        })();
+    </script>
+</body>
+</html>
